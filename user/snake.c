@@ -143,7 +143,7 @@ int move_snake(struct coords *snake, int *length, struct coords *apple, int xste
 	return 0;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[])// @NOTE 
 {
 	struct coords snake[SNAKE_MAX];
 	struct coords apple;

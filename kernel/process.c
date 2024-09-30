@@ -188,14 +188,14 @@ void process_stack_reset(struct process *p, unsigned size)
 	memset((void *) -size, size, 0);
 }
 
-struct process *process_create()
+struct process *process_create()// @NOTE 
 {
 	struct process *p;
 
 	p = page_alloc(1);
 
 	p->pid = process_allocate_pid();
-	process_table[p->pid] = p;
+	process_table[p->pid] = p;// @NOTE 
 
 	p->pagetable = pagetable_create();
 	pagetable_init(p->pagetable);
@@ -218,7 +218,7 @@ struct process *process_create()
 		p->ktable[i] = 0;
 	}
 
-	p->state = PROCESS_STATE_READY;
+	p->state = PROCESS_STATE_READY;// @NOTE 
 
 	return p;
 }
@@ -242,7 +242,7 @@ void process_launch(struct process *p)
 	list_push_tail(&ready_list, &p->node);
 }
 
-static void process_switch(int newstate)
+static void process_switch(int newstate)// @NOTE main func
 {
 	interrupt_block();
 
@@ -303,18 +303,18 @@ int allow_preempt = 0;
 void process_preempt()
 {
 	if(allow_preempt && current && ready_list.head) {
-		process_switch(PROCESS_STATE_READY);
+		process_switch(PROCESS_STATE_READY);// @NOTE 
 	}
 }
 
-void process_yield()
+void process_yield()// @NOTE 
 {
 	/* no-op if process module not yet initialized. */
 	if(!current) return;
 	process_switch(PROCESS_STATE_READY);
 }
 
-void process_exit(int code)
+void process_exit(int code)// @NOTE 
 {
 	// printf("process %d exiting with status %d...\n", current->pid, code); --> transport to kshell run
 	current->exitcode = code;
@@ -551,7 +551,7 @@ void process_pass_arguments(struct process *p, int argc, char **argv)
 	kfree(addr_of_argv);
 }
 
-int process_stats(int pid, struct process_stats *s)
+int process_stats(int pid, struct process_stats *s)// @NOTE 
 {
 	if(pid > PROCESS_MAX_PID || !process_table[pid]) {
 		return 1;
